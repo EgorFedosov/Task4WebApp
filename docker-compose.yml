@@ -1,0 +1,24 @@
+﻿services:
+  db:
+    image: postgres:17
+    container_name: task4_postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: task4db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: .
+      dockerfile: Task4WebApp/Dockerfile
+    container_name: task4_webapp_container
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=task4db;Username=postgres;Password=your_password
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db

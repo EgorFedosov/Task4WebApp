@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Task4WebApp.Models.User>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">User Management</h2>
+    
+    <form method="post">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="btn-toolbar gap-2" role="toolbar">
+                <button type="submit" class="btn btn-primary" asp-action="Block" title="Block selected users">
+                    <i class="bi bi-lock-fill"></i> Block
+                </button>
+                
+                <button type="submit" class="btn btn-light border" asp-action="Unblock" title="Unblock selected users">
+                    <i class="bi bi-unlock-fill"></i>
+                </button>
+                
+                <button type="submit" class="btn btn-light border" asp-action="Delete" title="Delete selected users">
+                    <i class="bi bi-trash-fill text-danger"></i>
+                </button>
+                
+                <button type="submit" class="btn btn-light border" asp-action="DeleteUnverified" title="Clear all unverified users">
+                    <i class="bi bi-person-x-fill text-danger"></i>
+                </button>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40px;">
+                        <input type="checkbox" id="selectAll" class="form-check-input" />
+                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Last Login</th>
+                    <th>Registration Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedIds" value="@user.Id" class="form-check-input user-checkbox" />
+                        </td>
+                        <td class="fw-bold">@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.LastLoginDate</td>
+                        <td>@user.RegistrationDate</td>
+                        <td>
+                            @if (user.Status == "Blocked")
+                            {
+                                <span class="text-danger">Blocked</span>
+                            }
+                            else if (user.Status == "Unverified")
+                            {
+                                <span class="text-secondary">Unverified</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Active</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.user-checkbox');
+            for (const checkbox of checkboxes) {
+                checkbox.checked = this.checked;
+            }
+        });
+    </script>
+}
